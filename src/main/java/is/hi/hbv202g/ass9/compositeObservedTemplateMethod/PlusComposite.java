@@ -1,35 +1,12 @@
 package is.hi.hbv202g.ass9.compositeObservedTemplateMethod;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class PlusComposite implements MathExpression, Observer {
-    private List<MathExpression> children = new ArrayList<>();
-    private int lastObservedResult = 0;
-
-    public void add(MathExpression mathExpression) {
-        children.add(mathExpression);
-        if (mathExpression instanceof Observable) {
-            ((Observable) mathExpression).addObserver(this);
-        }
-    }
-
+public class PlusComposite extends CompositeExpression {
     @Override
-    public int getResult() {
-        int result = 0;
-        for (MathExpression mathExpression : children) {
-            result += mathExpression.getResult();
+    protected int compute() {
+        int sum = 0;
+        for (MathExpression expr : children) {
+            sum += expr.getResult();
         }
-        return result;
-    }
-
-    @Override
-    public void update() {
-        lastObservedResult = getResult();
-        System.out.println("PlusComposite: update");
-    }
-
-    public int getLastObservedResult() {
-        return lastObservedResult;
+        return sum;
     }
 }
